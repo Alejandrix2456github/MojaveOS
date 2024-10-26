@@ -534,6 +534,7 @@ def print_help():
     print("- touch [file_name]: Create a new file.")
     print("- rm [item_name]: Remove a file or directory.")
     print("- install [app_package.zip]: Install an app from a .zip package.")
+    print("- create_partition [name] [size in bytes] [type]: Create a new partition.")
 
 def run_app(app_name):
     """Runs an app based on the current run mode setting."""
@@ -670,7 +671,7 @@ def load_file_system_data():
 def get_partition(path):
     """Gets the partition for a given path."""
     global partition_table, current_dir
-
+    
 
 def create_file(file_name):
     """Creates a new file in the appropriate partition."""
