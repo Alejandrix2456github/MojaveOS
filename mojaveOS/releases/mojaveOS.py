@@ -14,14 +14,107 @@ import sys
 import psutil
 import time 
 
-import time
+print("Initializing System....")
+print("System Initialized!")
 
+# --- Boot Manager ---
+def boot_manager():
+    pass
+    print("What Partition you want to boot?")
+    print(partition_table)
+    print("Choose a Partition:")
+    partition_table = {
+        "partitions": [
+            {
+                "name": "main",
+                "size": 500 * 1024 * 1024,  # 500 MB
+                "start": 0, 
+                "type": "data"
+            },
+            {
+                "name": "apps",
+                "size": 200 * 1024 * 1024,  # 200 MB
+                "start": 500 * 1024 * 1024,  # Starts after the main partition
+                "type": "apps"
+            }
+
+        ]
+    }
+    # /generate boot manager options
+    print("Boot Manager")
+    print("1. Boot from main partition")
+    print("2. Boot from apps partition")
+    print("3. Boot from other partition")
+    print("4. Exit")
+    choice = input("Enter your choice: ")
+    if choice == "1":
+        print("Booting from main partition...")
+        main()
+    elif choice == "2":
+        print("Booting from apps partition...")
+        appsbios()
+
+    elif choice == "3":
+        print("Booting from other partition...")
+        # ...
+    elif choice == "4":
+        print("Exiting Boot Manager...")
+        sys.exit()
+    else:
+        print("Invalid choice.")
+
+# --- Performance Measurement ---
 start_time = time.time()
 # Run the app code here
 end_time = time.time()
 
 execution_time = end_time - start_time
 print(f"App execution time: {execution_time} seconds")
+
+
+def appsbios():
+    pass
+    print("Apps Installed:")
+    print(list_apps())
+    print("1. Calculator")
+    print("2. Guessing Game")
+    print("3. Text Editor")
+    print("4. Calendar")
+    print("5. App Store")
+    print("6. Back to Boot Manager")
+    choice = input("Enter your choice: ")
+    if choice == "1":
+        print("Running Calculator...")
+        app_calculator()
+    elif choice == "2":
+        print("Running Guessing Game...")
+        app_guessing_game()
+    elif choice == "3":
+        print("Running Text Editor...")
+        app_text_editor()
+    elif choice == "4":
+        print("Running Calendar...")
+        app_calendar()
+    elif choice == "5":
+        print("Opening App Store...")
+        app_store()
+    elif choice == "6":
+        print("Returning to Boot Manager...")
+        boot_manager()
+    else:
+        print("Invalid choice.")
+
+
+# --- App Management ---
+def install_app(app_name):
+    """Installs a .tear app."""
+    target_dir = os.path.join(APPS_DIR, app_name)
+
+    if os.path.exists(target_dir):
+        print(f"App '{app_name}' is already installed.")
+    else:
+         pass
+            
 
 def uninstall_app(app_name):
     """Uninstalls a .tear app."""
@@ -45,7 +138,7 @@ command_history_list = []
 GITHUB_REPO = "https://api.github.com/repos/Alejandrix2456github/MojaveOS/mojaveOS/apps"
 APPS_DIR = "/mojaveOS/apps"
 FILE_SYSTEM_DATA_FILE = "file_system_data.json"  # File to store file system data
-SETTINGS_FILE = "tearOS_settings.json"
+SETTINGS_FILE = "mojaveOS_settings.json"
 
 # --- Command History ---
 def command_history(command):
@@ -56,7 +149,6 @@ def command_history(command):
         command_history_list.pop(0)
 
 
-# ... other imports ...
 
 def list_running_processes():
     """Lists currently running processes."""
@@ -316,17 +408,17 @@ def app_calendar():
             print("Invalid input. Please enter numbers only.")
 
 def app_store():
-    print("Welcome to the TearOS App Store!")
+    print("Welcome to the MojaveOS App Store!")
     while True:
-        print("\n1. List Available Apps")
+        print("\n1. List Available Apps (BROKEN)")
         print("2. Search Apps")
         print("3. Install App")
         print("4. Update Apps")
-        print("5. Back to TearOS")
+        print("5. Back to MojaveOS")
         choice = input("Enter your choice: ")
 
         if choice == "1":
-            list_available_apps()
+            print("due to some errors in the github API not detecting the MojaveOS repository, list apps will be temporally off")
         elif choice == "2":
             search_term = input("Enter search term: ")
             search_apps(search_term)
@@ -340,6 +432,29 @@ def app_store():
             print("Invalid choice.")
             
 def load_app_store_data():
+    """Loads app data from the GitHub repository and categorizes them."""
+    global load_app_store_data
+    try:
+        response = requests.get(GITHUB_REPO)
+        response.raise_for_status()
+        apps_data = response.json()
+
+        app_store_data = {}  # Reset the data
+        for app in apps_data:
+            app_name = app['name']
+            app_description = app.get('description', 'No description available')
+            app_category = app.get('category', 'Uncategorized')  # Get category
+
+            # If the category doesn't exist, create it
+            if app_category not in app_store_data:
+                app_store_data[app_category] = {}
+
+            app_store_data[app_category][app_name] = app_description
+
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching app data: {e}")
+
+def app_store_data():
     """Loads app data from the GitHub repository and categorizes them."""
     global app_store_data
     try:
