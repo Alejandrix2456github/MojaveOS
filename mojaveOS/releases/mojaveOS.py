@@ -638,6 +638,16 @@ partition_table = {
 def create_partition(name, size, type="data"):
     """Creates a new partition."""
     global partition_table
+    # Check if the partition name already exists
+    for partition in partition_table["partitions"]:
+        if partition["name"] == name:
+            print(f"Error: A partition named '{name}' already exists.")
+            return
+
+    # Check if the size is valid
+    if size <= 0:
+        print("Error: Invalid size. Size must be greater than 0.")
+        return
 
     # Calculate the starting location of the new partition
     last_partition = partition_table["partitions"][-1]
