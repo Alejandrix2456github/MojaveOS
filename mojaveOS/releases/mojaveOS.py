@@ -617,6 +617,65 @@ def change_settings():
         else:
             print("Invalid choice.")
 
+partition_table = {
+    "partitions": [
+        {
+            "name": "main",
+            "size": 500 * 1024 * 1024,  # 500 MB
+            "start": 0, 
+            "type": "data"
+        },
+        {
+            "name": "apps",
+            "size": 200 * 1024 * 1024,  # 200 MB
+            "start": 500 * 1024 * 1024,  # Starts after the main partition
+            "type": "apps"
+        }
+
+    ]
+}
+
+def create_partition(name, size, type="data"):
+    """Creates a new partition."""
+    global partition_table
+
+    # Calculate the starting location of the new partition
+    last_partition = partition_table["partitions"][-1]
+    start_location = last_partition["start"] + last_partition["size"]
+
+    # Add the new partition to the partition table
+    partition_table["partitions"].append({
+        "name": name,
+        "size": size,
+        "start": start_location,
+        "type": type
+    })
+
+    # Update the file system data (you'll need to implement this)
+    save_file_system()
+
+def load_file_system_data():
+    pass
+
+def get_partition(path):
+    """Gets the partition for a given path."""
+    global partition_table, current_dir
+
+
+def create_file(file_name):
+    """Creates a new file in the appropriate partition."""
+    global current_dir, file_system, partition_table
+
+    partition = get_partition(current_dir)
+    if not partition:
+        print("Error: Invalid path or partition.")
+        return
+
+    # ... (Check for free space in the partition)
+
+    # ... (Calculate the file's location within the partition)
+
+    # ... (Update the file system data and the partition table)
 
 
 # --- Main OS Loop ---
@@ -724,12 +783,25 @@ def main():
                 extract_app(parts[1])
             else:
                 print("Invalid command. Usage: install [app_package.tear]")
-        elif command.startswith("uninstall"): # This is the code you're looking for
+        elif command.startswith("uninstall"): 
             parts = command.split(" ", 1)
             if len(parts) == 2:
                 uninstall_app(parts[1])
             else:
                 print("Invalid command. Usage: uninstall [app_name]")
+        elif command.startswith("create_partition"):
+            parts = command.split(" ")
+            if len(parts) == 4:
+                name = parts[1]
+                try:
+                    size = int(parts[2])
+                    type = parts[3]
+                    create_partition(name, size, type)
+                    print(f"Partition '{name}' created successfully.")
+                except ValueError:
+                    print("Invalid size. Please enter an integer.")
+            else:
+                print("Invalid command. Usage: create_partition [name] [size in bytes] [type]")        
         else:
             print("Invalid command.")
 
