@@ -1,0 +1,6 @@
+MojaveOS Documentation (11/11/24)
+MojaveOS works by some variables,json files, modules and even the loops
+making the OS work in the logon loop and logined system, it saves your
+created account onto a json file named user_data.json
+it uses zip files for apps,has built-in apps like
+calulcator,app store and even more.
