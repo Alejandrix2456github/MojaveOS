@@ -1,3 +1,4 @@
+(this repo is now archived and an abandoned project. go [here](https://github.com/Alejandrix2456github/MojaveOS) to see the official branch of the project (mojaveOS).)
 # 1: TearOS
 ![The Logo](https://github.com/cWorksLLC/tear-os/blob/main/tear-logo.png)
 ## 1.1: About
